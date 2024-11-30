@@ -45,18 +45,24 @@ int main(void) {
     SOCKET socket;
     socket = socketInitialization();
     struct sockaddr_in server;
-    server.sin_addr.s_addr = inet_addr("10.0.0.0");
     server.sin_family = AF_INET;
     server.sin_port = htons(80); // htons used for endianess to store in big endian format
+    server.sin_addr.s_addr = inet_addr("127.0.0.1");
 
     // connecting to the remote server
-    int connectionStatus = connect(socket, (struct sockaddr*)&server, sizeof(server));
-    if (connectionStatus < 0) {
-      puts("Connection Error");
+    int connectionStatus = connect(socket, (struct sockaddr *)&server, sizeof(server));
+    // int connectionStatus = connect(socket, sizeof(struct sockaddr_in), sizeof(server));
+    printf("Connection Status: %d\n", connectionStatus);
+    if (connectionStatus == -1) {
+      perror("Error");
+      return 1;
     }
     else {
-      puts ("Connection successful");
+      puts("Connection successful");
     }
+
+    closesocket(socket);
+    WSACleanup();
 
     return 0;
 }

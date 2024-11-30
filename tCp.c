@@ -22,29 +22,24 @@ int winSockInitialization() {
     WORD windowsVersionRequested = MAKEWORD(2, 2);
     int initializedResult = WSAStartup(windowsVersionRequested, &myWindowsSocketData);
     if (initializedResult != 0) {
-        printf("winsock initialization failed: %d\n", initializedResult);
+      printf("winsock initialization failed: %d\n", initializedResult);
+      return initializedResult;
     }
-    return initializedResult;
+    printf("Winsock Initialization state: SUCCESS");
+    return 0;
 }
 
-int socketInitialization() {
+SOCKET socketInitialization() {
     int active = 0;
-    SOCKET serverSocket;
-    // serverSocket = INVALID_SOCKET;
-    serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    SOCKET serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
     // checking if socket was created
     if (serverSocket == INVALID_SOCKET) {
-        printf("\nSocket was not initialized -> ", WSAGetLastError());
-        WSACleanup();
+      int errorCode = WSAGetLastError();
+      printf("\nSocket was not initialized -> Error code: %d\n", errorCode);
+      WSACleanup();
+      return INVALID_SOCKET;
     }
-    else {
-        printf("\nSOCKET IS OK\n");
-        active = 1;
-    }
-
-    if (active) {
-        return serverSocket;
-    }
-    return 0;
+    printf("\nSOCKET IS OK\n");
+    return serverSocket;
 }
