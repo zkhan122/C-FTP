@@ -1,45 +1,21 @@
+#define _OPEN_SYS_SOCK_EXT
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 
-#if defined(_WIN32) || defined(_WIN64)
-    #include <winsock2.h>
-#else
-    #include <sys/socket.h>
-    #include <arpa/inet.h>
-#endif
-#include <ws2def.h>
-
-
-#pragma comment(lib,"ws2_32.lib")
-
-
-int winSockInitialization() {
-    WSADATA myWindowsSocketData;
-    // WSAStartup(0x0202, &myWindowsSocketData);
-    // return myWindowsSocketData;
-    WORD windowsVersionRequested = MAKEWORD(2, 2);
-    int initializedResult = WSAStartup(windowsVersionRequested, &myWindowsSocketData);
-    if (initializedResult != 0) {
-      printf("winsock initialization failed: %d\n", initializedResult);
-      return initializedResult;
-    }
-    printf("Winsock Initialization state: SUCCESS");
-    return 0;
-}
-
-SOCKET socketInitialization() {
-    int active = 0;
-    SOCKET serverSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-
+int socketInitialization() {
+    int socket_init = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    printf("Socket initialization status: (%d)", socket_init);
     // checking if socket was created
-    if (serverSocket == INVALID_SOCKET) {
-      int errorCode = WSAGetLastError();
-      printf("\nSocket was not initialized -> Error code: %d\n", errorCode);
-      WSACleanup();
-      return INVALID_SOCKET;
+    if (socket_init < 0) {
+      printf("\nSocket was not initialized -> Error code: %d\n");
+      perror("Error");
+      exit(2);
+    } else {
+    printf("\nSUCCESS: SOCKET IS OK -> SERVER SOCKET CREATED\n");
     }
-    printf("\nSOCKET IS OK\n");
-    return serverSocket;
+    return socket_init;
 }

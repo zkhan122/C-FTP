@@ -1,0 +1,24 @@
+Server
+
+    Initialize Winsock.
+    Create a socket.
+    Bind the socket.
+    Listen on the socket for a client.
+    Accept a connection from a client.
+    Receive and send data.
+    Disconnect.
+
+Client
+
+    Initialize Winsock.
+    Create a socket.
+    Connect to the server.
+    Send and receive data.
+    Disconnect.
+
+/*
+    gcc server.c -o server.o -c
+    gcc tCp.c -o tCp.o -c
+    gcc -o program tCp.o server.o
+    ./program
+*/
