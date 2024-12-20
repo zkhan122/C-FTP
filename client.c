@@ -1,19 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include "./tCp.h"
 
-char *ip_address = "127.0.0.1";
-int port 1024;
+int main(void) {
+  int client_to_server_socket =  socketInitialization();
+  char *ip_client_address = "127.0.0.1";
+  int port = 1024;
 
-int client_to_server_socket;
-struct sockaddr_in client_addr;
-socklen_t client_addr_size;
-char buffer[1024];
-int n;
+  struct sockaddr_in client_addr;
+  socklen_t client_addr_size;
+  char messageBuffer[1024];
 
-client_to_server_socket = socket(AF_INET, SOCK_STREAM, 0); // AF_INET is an address family that your socket can communicate with
-if (client_to_server_socket < 0) {
-  perror("Error");
-} else {
-  printf("good");
+  memset(&client_addr, '\0', sizeof(client_addr));
+  client_addr.sin_family = AF_INET;
+  client_addr.sin_port = port;
+  client_addr.sin_addr.s_addr = inet_addr(ip_client_address);
+
+  while (1) {
+    connect(client_to_server_socket, (struct sockclient_addr*)&client_addr, sizeof(client_addr));
+    printf("SUCCESS: CONNECTED TO SERVER\n");
+
+    bzero(messageBuffer, 1024);
+    strcpy(messageBuffer, "Hi! This is a response from the client");
+    printf("Client: %s\n", messageBuffer);
+    send(client_to_server_socket, messageBuffer, strlen(messageBuffer), 0);
+
+    bzero(messageBuffer, 1024);
+    recv(client_to_server_socket, messageBuffer, sizeof(messageBuffer), 0);
+    printf("Server: %s\n", messageBuffer);
+
+    close(client_to_server_socket);
+    printf("Disconnected from the server");
+
+  }
+  return 0;
 }

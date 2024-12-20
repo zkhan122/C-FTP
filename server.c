@@ -4,7 +4,7 @@
 #include <errno.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include "./tCp.h"
+#include "tCp.h"
 
 
 // only for visual c++ compiler -> #pragma comment(lib,"ws2_32.lib
@@ -12,7 +12,7 @@
 #define MAX_MESSAGE_SIZE 256
 
 int main(void) {
-    char *ip_address = "127.0.0.0.1";
+    char *ip_address = "127.0.0.c.1";
     int port = 1024;
     char messageBuffer[1024];
     struct sockaddr_in server_socket_addr; // initializing the server socket
@@ -52,7 +52,14 @@ int main(void) {
       recv(client_socket, messageBuffer, sizeof(messageBuffer), 0);
       printf("Client: (%s)\n", messageBuffer);
 
+      bzero(messageBuffer, 1024);
+      strcpy(messageBuffer, "Hi! This is a response from the server");
+      printf("Server: %s\n", messageBuffer);
+      send(client_socket, messageBuffer, strlen(messageBuffer), 0);
+
+
       close(socket);
+      printf("\n --> Client has disconnected\n\n");
     }
 
     return 0;

@@ -7,7 +7,7 @@
 #include <netinet/in.h>
 
 int socketInitialization() {
-    int socket_init = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    int socket_init = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP); // AF_INET is an address family that your socket can communicate with
     printf("Socket initialization status: (%d)", socket_init);
     // checking if socket was created
     if (socket_init < 0) {
