@@ -1,2 +1,2 @@
-# C-FTP
-a small ftp server in C
+
+a small tcp server in C
