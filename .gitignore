@@ -1,0 +1,5 @@
+server.o
+client.o
+tCp.o
+clientProg
+serverProg
